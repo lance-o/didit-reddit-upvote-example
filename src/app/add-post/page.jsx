@@ -4,17 +4,49 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { LoginButton } from "@/components/LoginButton";
 import { LogoutButton } from "@/components/LogoutButton";
+import Tiptap from "@/components/Tiptap";
+
+let error = "";
+let prevError = "";
+
+function handleError(userId, title, content) {
+  let tempError = "";
+  if (!userId) {
+    tempError += `You be logged in to be able to post.\n`;
+  }
+  if (title == "") {
+    tempError += `Your post title must have at least one character.\n`;
+  } else if (title.length > 255) {
+    tempError += `You cannot have more than 255 characters your post title.\n`;
+  }
+  if (content == "") {
+    tempError += `Your post must have at least one character.\n`;
+  }
+  if (tempError !== "") {
+    prevError = error;
+    error = tempError;
+    return true;
+  }
+  return false;
+}
 
 export default async function Home() {
   const session = await auth();
+
+  if (error === prevError) {
+    error = "";
+  } else {
+    prevError = error;
+  }
 
   async function savePost(formData) {
     "use server";
     const content = formData.get("content");
     const title = formData.get("title");
     const userId = session?.user?.id;
-    if (!userId) {
-      throw new Error("You need to login");
+    if (handleError(userId, title, content)) {
+      revalidatePath("/add-post");
+      return;
     }
 
     await db.query(
@@ -53,6 +85,11 @@ export default async function Home() {
           Submit post
         </button>
       </form>
+      {error != "" ? (
+        <h1 className="flex justify-center bg-red-500 whitespace-pre rounded p-3">
+          {error}
+        </h1>
+      ) : null}
     </div>
   );
 }

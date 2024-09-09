@@ -2,6 +2,7 @@ import { db } from "@/db";
 import auth from "../app/middleware";
 import { revalidatePath } from "next/cache";
 import { VoteButtons } from "./VoteButtons";
+import { useRouter } from "next/navigation";
 
 async function getExistingVote(userId, postId) {
   const { rows: existingVotes } = await db.query(
@@ -11,11 +12,25 @@ async function getExistingVote(userId, postId) {
 
   return existingVotes?.[0];
 }
-
-async function handleVote(userId, postId, newVote) {
-  // Check if the user has already voted on this post
+let error = "";
+let prevError = "";
+function HandleError(userId) {
+  let ret = false;
+  prevError = error;
+  console.log(error, " and ",prevError);
   if (!userId) {
-    throw new Error("Cannot vote without being logged in");
+    error = "You must be logged in to vote.";
+    ret = true;
+  } else {
+    error = "";
+  }
+  return ret;
+}
+
+async function handleVote(userId, postId, newVote) {  // Check if the user has already voted on this post
+  if (HandleError(userId)) {
+    revalidatePath(`/post/${postId}`);
+    return;
   }
 
   const existingVote = await getExistingVote(userId, postId);
@@ -47,6 +62,13 @@ export async function Vote({ postId, votes }) {
   const session = await auth();
   const existingVote = await getExistingVote(session?.user?.id, postId);
 
+  if(error === prevError){
+    error = "";
+  }
+  else{
+    prevError = error;
+  }
+
   async function upvote() {
     "use server";
     await handleVote(session?.user?.id, postId, 1);
@@ -58,7 +80,7 @@ export async function Vote({ postId, votes }) {
   }
 
   return (
-    <>
+    <div className="flex-column">
       <form className="flex items-center space-x-3 pl-3">
         <VoteButtons
           upvote={upvote}
@@ -102,6 +124,7 @@ export async function Vote({ postId, votes }) {
           )}
         </button> */}
       </form>
-    </>
+      <div className="absolute bg-red-500 flex items-center justify-center"><p>{error}</p></div>
+    </div>
   );
 }
