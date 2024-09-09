@@ -1,48 +1,17 @@
-## Upvote
+# Assignment reflection
 
-Upvote is a Reddit-esque web application that allows users to create posts, upvote and downvote posts, and comment on posts in a multi-threaded, nested list.
+- Didn't love that it was a one-day thing with little prospect of help, made me not want to bother asking and I would have liked some direct guidance regarding Tiptap, and I gave up on that after getting frustrated at trying to find something to reference for it.
 
-The project is built using Next.js with the /app router and [Tailwind CSS](https://tailwindcss.com/), and uses [Auth.js (formerly Next Auth)](https://authjs.dev/) for user authentication. The data is stored in a Postgres database, which is created and accessed with raw SQL queries using the `pg` package.
+# Requirements
 
-The project is a work in progress and is not yet complete.
+Were there any requirement laid out for this one other than "fork a repo and deploy to vercel"? Anyway, that's been done.
 
-## Features
+I also added some error handling to Vote.jsx and AddPost, added post titles to the metadata, and un-commented the line of SQL that causes the entire database to break, but on its own implements one like-per-user (was it meant to be deleted?).
 
-- [x] View a list of posts
-- [x] View a single post
-- [x] Create a post
-- [x] Upvote and downvote posts
-- [x] Pagination of posts
-- [x] Comment on posts
-- [x] Nested comments (recursive lists)
-- [x] User authentication
+I added a basic user page, but did nothing with it really.
 
-## Setup instructions
+I might have tried some more stretch goals, but I really did spend a lot of time trying to find something to help me with Tiptap and the form-submit process and everything I found I didn't really understand, and before I knew it I was looking at 3PM with nothing to show for it.
 
-1. Fork the repository (check "copy the main branch only") and clone your fork to your local machine
-2. Run `npm install`
-3. Create a `.env.local` file in the root directory and add the following environment variables:
-   - `DATABASE_URL` - the URL of your Postgres database (eg. the Supabase connection string)
-   - `AUTH_SECRET` - the Next Auth secret string (this can be anything at all like a password, but keep it secret!)
-   - `AUTH_GITHUB_ID` - the GitHub OAuth client ID (create yours in [Github developer settings](https://github.com/settings/developers)
-   - `AUTH_GITHUB_SECRET` - the GitHub OAuth client secret (create this in [Github developer settings](https://github.com/settings/developers))
-4. Create the database schema by running the SQL commands in `schema.sql` in your database (eg. by running the commands in Supabase Query Editor)
-5. Run `npm run dev` to start the development server
-6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the site
+# Thoughts
 
-## Potential future features
-
-- [ ] User profiles
-- [ ] Sorting posts by recent (date posted), top (most upvotes), and most controversial (most upvotes _and_ downvotes)
-- [ ] User karma scores
-- [ ] User badges / trophies (awards for achievements like number of posts, years on the site, etc.)
-- [ ] User settings (eg. number of posts per page, theme, etc.)
-- [ ] Moderation tools / reporting or flagging objectionable comments for removable by admins
-- [ ] Searching posts (possibly using simple SQL LIKE '%some search%', or [Postgres text search](https://www.crunchydata.com/blog/postgres-full-text-search-a-search-engine-in-a-database))
-- [ ] Subreddits (separate communities, that isn't just one big list of posts, that can be created by users)
-- [ ] User notifications
-- [ ] User private messaging
-- [ ] User blocking
-- [ ] User following
-- [ ] User feed (posts from users you follow)
-- [ ] User flair
+I like the idea of a one-day challenge with smaller goals and stakes, but with less direct help - but I don't think you can just drop it on our heads like that. I had (past tense, haven't had it at time of this Readme haha) a doctor's appointment today after class, if I had done it during the morning then suddenly I would have missed crucial time.

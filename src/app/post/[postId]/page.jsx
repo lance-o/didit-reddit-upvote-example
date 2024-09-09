@@ -14,7 +14,6 @@ export async function generateMetadata({ params, searchParams }, parent) {
   };
 }
 
-
 export default async function SinglePostPage({ params }) {
   
   const postId = params.postId;
